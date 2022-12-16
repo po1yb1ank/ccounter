@@ -1,5 +1,10 @@
 # Counters API
 
+# TODO
+- Description of methods
+- Tests with server mock
+- Swagger API
+
 ## **GET /:key**
 
 Возвращает текущее значение счетчика с указанным `key` (по умолчанию: 0).
@@ -17,3 +22,4 @@
 Сбрасывает значение счетчика.
 
 ## Websocket **/subscribe**
+
