@@ -2,7 +2,6 @@ package storage
 
 import (
 	"context"
-	"errors"
 	"net"
 	"strconv"
 
@@ -13,7 +12,7 @@ import (
 type IStorage interface {
 	Increment(ctx context.Context, key string) (int64, error)
 	Decrement(ctx context.Context, key string) (int64, error)
-	Reset(ctx context.Context, key string) error
+	Set(ctx context.Context, key string, value int64) error
 	Current(ctx context.Context, key string) (int64, error)
 }
 
@@ -34,6 +33,10 @@ func NewRedisStorage(config config.Redis) IStorage {
 }
 
 func (r *RedisStorage) Increment(ctx context.Context, key string) (int64, error) {
+	if r.client.Exists(ctx, key).Val() == 0 {
+		return 0, ErrorKeyNotFound
+	}
+
 	result, err := r.client.Incr(ctx, key).Result()
 	if err != nil {
 		return 0, err
@@ -43,6 +46,10 @@ func (r *RedisStorage) Increment(ctx context.Context, key string) (int64, error)
 }
 
 func (r *RedisStorage) Decrement(ctx context.Context, key string) (int64, error) {
+	if r.client.Exists(ctx, key).Val() == 0 {
+		return 0, ErrorKeyNotFound
+	}
+
 	result, err := r.client.Decr(ctx, key).Result()
 	if err != nil {
 		return 0, err
@@ -51,8 +58,8 @@ func (r *RedisStorage) Decrement(ctx context.Context, key string) (int64, error)
 	return result, nil
 }
 
-func (r *RedisStorage) Reset(ctx context.Context, key string) error {
-	return r.client.Set(ctx, key, 0, 0).Err()
+func (r *RedisStorage) Set(ctx context.Context, key string, value int64) error {
+	return r.client.Set(ctx, key, value, 0).Err()
 }
 
 func (r *RedisStorage) Current(ctx context.Context, key string) (int64, error) {
@@ -61,13 +68,8 @@ func (r *RedisStorage) Current(ctx context.Context, key string) (int64, error) {
 		return 0, err
 	}
 
-	if errors.Is(err, redis.Nil) {
-		_, err := r.client.Set(ctx, key, 0, 0).Result()
-		if err != nil {
-			return 0, err
-		}
-
-		return 0, nil
+	if len(result) == 0 {
+		return 0, ErrorKeyNotFound
 	}
 
 	val, err := strconv.Atoi(result)

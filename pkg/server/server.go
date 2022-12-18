@@ -5,8 +5,11 @@ import (
 	"net"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/po1yb1ank/ccounter/config"
+	docs "github.com/po1yb1ank/ccounter/docs"
 	"github.com/po1yb1ank/ccounter/pkg/handlers/key"
 	"github.com/po1yb1ank/ccounter/pkg/handlers/key/decrement"
 	"github.com/po1yb1ank/ccounter/pkg/handlers/key/increment"
@@ -27,7 +30,7 @@ type GinServer struct {
 	router  *gin.Engine
 	storage storage.IStorage
 	logger  logger.ILogger
-	watcher *watcher.Watcher
+	watcher watcher.IWatcher
 }
 
 func NewGinServer(
@@ -37,7 +40,7 @@ func NewGinServer(
 ) IServer {
 	router := gin.Default()
 	addr := net.JoinHostPort(config.Host, config.Port)
-	watcher := watcher.NewWatcher()
+	watcher := watcher.NewWSWatcher()
 
 	server := &GinServer{
 		router:  router,
@@ -53,6 +56,9 @@ func NewGinServer(
 }
 
 func (g *GinServer) registerHandlers() {
+	docs.SwaggerInfo.BasePath = "/"
+	docs.SwaggerInfo.Host = g.addr
+
 	g.router.GET("/:key", key.Get(g.storage, g.logger))
 
 	g.router.POST("/:key/reset", reset.Post(g.storage, g.logger, g.watcher))
@@ -60,6 +66,8 @@ func (g *GinServer) registerHandlers() {
 	g.router.POST("/:key/decrement", decrement.Post(g.storage, g.logger, g.watcher))
 
 	g.router.GET("/subscribe", subscribe.Ws(g.storage, g.logger, g.watcher))
+
+	g.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }
 
 func (g *GinServer) Run() error {

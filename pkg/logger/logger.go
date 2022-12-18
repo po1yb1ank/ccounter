@@ -26,9 +26,11 @@ func NewZapSugaredLogger() ILogger {
 func (l *ZapSugaredLogger) Error(msg string) {
 	l.logger.Error(msg)
 }
+
 func (l *ZapSugaredLogger) Info(msg string) {
 	l.logger.Info(msg)
 }
+
 func (l *ZapSugaredLogger) Debug(msg string) {
 	l.logger.Debug(msg)
 }

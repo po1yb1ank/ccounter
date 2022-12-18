@@ -7,14 +7,41 @@ type CounterResponse struct {
 	Message      string `json:"message,omitempty"`
 	ErrorMessage string `json:"error_message,omitempty"`
 
-	Key   string `json:"key,omitempty"`
-	Value int64  `json:"value,omitempty"`
+	Key   *string `json:"key,omitempty"`
+	Value *int64  `json:"value,omitempty"`
 }
 
-func NewOkGetCounterResponse(key string, value int64) *CounterResponse {
+func NewOkGetCounterResponse(key *string, value *int64) *CounterResponse {
 	return &CounterResponse{
 		Status:  http.StatusOK,
 		Message: "Successful get key value action",
+		Key:     key,
+		Value:   value,
+	}
+}
+
+func NewOkIncrementCounterResponse(key *string, value *int64) *CounterResponse {
+	return &CounterResponse{
+		Status:  http.StatusOK,
+		Message: "Successful increment key value action",
+		Key:     key,
+		Value:   value,
+	}
+}
+
+func NewOkDecrementCounterResponse(key *string, value *int64) *CounterResponse {
+	return &CounterResponse{
+		Status:  http.StatusOK,
+		Message: "Successful decrement key value action",
+		Key:     key,
+		Value:   value,
+	}
+}
+
+func NewOkResetCounterResponse(key *string, value *int64) *CounterResponse {
+	return &CounterResponse{
+		Status:  http.StatusOK,
+		Message: "Successful reset key value action",
 		Key:     key,
 		Value:   value,
 	}

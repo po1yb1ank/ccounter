@@ -8,5 +8,6 @@ var (
 	ErrorFailedToDecrement = errors.New("failed to decrement counter")
 	ErrorFailedToGet       = errors.New("failed to get counter value")
 
-	ErrorWSConn = errors.New("failed to set WS connection")
+	ErrorWSConn         = errors.New("failed to set WS connection")
+	ErrorFailedToNotify = errors.New("failed to notify subscribers")
 )

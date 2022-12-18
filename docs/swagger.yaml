@@ -1,9 +1,115 @@
 basePath: /
+definitions:
+  handlers.CounterResponse:
+    properties:
+      error_message:
+        type: string
+      key:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+      value:
+        type: integer
+    type: object
 host: localhost:8888
 info:
   contact: {}
   description: Counter API service
   title: Counter API
   version: "1.0"
-paths: {}
+paths:
+  /{key}:
+    post:
+      description: 'gets counter :key: by key'
+      parameters:
+      - description: Counter key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+      summary: gets counter
+  /{key}/decrement:
+    post:
+      description: decrement counter :key
+      parameters:
+      - description: Counter key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+      summary: decrement counter
+  /{key}/increment:
+    post:
+      description: increment counter :key
+      parameters:
+      - description: Counter key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+      summary: increment counter
+  /{key}/reset:
+    post:
+      description: resets counter :key
+      parameters:
+      - description: Counter key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.CounterResponse'
+      summary: resets counter
 swagger: "2.0"

@@ -15,7 +15,170 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/{key}": {
+            "post": {
+                "description": "gets counter :key: by key",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "gets counter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Counter key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{key}/decrement": {
+            "post": {
+                "description": "decrement counter :key",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "decrement counter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Counter key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{key}/increment": {
+            "post": {
+                "description": "increment counter :key",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "increment counter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Counter key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{key}/reset": {
+            "post": {
+                "description": "resets counter :key",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "resets counter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Counter key",
+                        "name": "key",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CounterResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.CounterResponse": {
+            "type": "object",
+            "properties": {
+                "error_message": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

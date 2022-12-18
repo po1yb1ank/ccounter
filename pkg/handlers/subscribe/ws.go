@@ -12,7 +12,11 @@ import (
 	"github.com/po1yb1ank/ccounter/pkg/watcher"
 )
 
-func Ws(storage storage.IStorage, logger logger.ILogger, watcher *watcher.Watcher) func(*gin.Context) {
+func Ws(
+	storage storage.IStorage,
+	logger logger.ILogger,
+	watcher watcher.IWatcher,
+) func(*gin.Context) {
 	wsupgrader := websocket.Upgrader{
 		ReadBufferSize:  handlers.DEFAULT_WS_BUFFER_SIZE,
 		WriteBufferSize: handlers.DEFAULT_WS_BUFFER_SIZE,
